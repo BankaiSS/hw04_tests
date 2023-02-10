@@ -1,5 +1,6 @@
 from django.test import TestCase
-from ..models import Group,Post,User
+from ..models import Group, Post, User
+
 
 class PostModelTest(TestCase):
     @classmethod
@@ -15,11 +16,11 @@ class PostModelTest(TestCase):
             author=cls.user,
             text='Тестовый пост',
         )
- 
+
     def test_post_str(self):
         """Проверка __str__ у post."""
         self.assertEqual(self.post.text[:15], str(self.post))
- 
+
     def test_post_verbose_name(self):
         """Проверка verbose_name у post."""
         field_verboses = {
@@ -31,7 +32,7 @@ class PostModelTest(TestCase):
             with self.subTest(value=value):
                 verbose_name = self.post._meta.get_field(value).verbose_name
                 self.assertEqual(verbose_name, expected)
- 
+
     def test_post_help_text(self):
         """Проверка help_text у post."""
         feild_help_texts = {
@@ -41,8 +42,8 @@ class PostModelTest(TestCase):
             with self.subTest(value=value):
                 help_text = self.post._meta.get_field(value).help_text
                 self.assertEqual(help_text, expected)
- 
- 
+
+
 class GroupModelTest(TestCase):
     @classmethod
     def setUpClass(cls):
@@ -53,11 +54,11 @@ class GroupModelTest(TestCase):
             slug='Тестовый слаг',
             description='Тестовое описание',
         )
- 
+
     def test_group_str(self):
         """Проверка __str__ у group."""
         self.assertEqual(self.group.title, str(self.group))
- 
+
     def test_group_verbose_name(self):
         """Проверка verbose_name у group."""
         field_verboses = {

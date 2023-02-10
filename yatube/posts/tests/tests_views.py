@@ -1,10 +1,10 @@
 from django import forms
 from django.test import Client, TestCase
 from django.urls import reverse
- 
+
 from ..models import Group, Post, User
- 
- 
+
+
 class PostTests(TestCase):
     @classmethod
     def setUpClass(cls):
@@ -15,17 +15,17 @@ class PostTests(TestCase):
             slug='test-slug',
             description='Тестовое описание',
         )
- 
+
         cls.post = Post.objects.create(
             text='Тестовый пост',
             author=cls.author,
             group=cls.group,
         )
- 
+
     def setUp(self):
         self.authorized_client = Client()
         self.authorized_client.force_login(self.author)
- 
+
     def test_pages_uses_correct_template(self):
         """URL-адрес использует соответствующий шаблон."""
         page_names_templates = {
@@ -48,7 +48,7 @@ class PostTests(TestCase):
             with self.subTest(template=template):
                 response = self.authorized_client.get(reverse_name)
                 self.assertTemplateUsed(response, template)
- 
+
     def posts_check_all_fields(self, post):
         """Метод, проверяющий поля поста."""
         with self.subTest(post=post):
@@ -56,7 +56,6 @@ class PostTests(TestCase):
             self.assertEqual(post.author, self.post.author)
             self.assertEqual(post.group.id, self.post.group.id)
 
- 
     def test_forms_show_correct(self):
         """Проверка коректности формы поста."""
         url_filds = {
@@ -73,13 +72,12 @@ class PostTests(TestCase):
                     response.context['form'].fields['group'],
                     forms.fields.ChoiceField)
 
- 
     def test_home_page_show_correct_context(self):
         """Шаблон главной страницы сформирован с правильным контекстом."""
         response = self.authorized_client.get(reverse('posts:index'))
         last_post = response.context['page_obj'][0]
         self.posts_check_all_fields(last_post)
- 
+
     def test_group_list_page_show_correct_context(self):
         """Шаблон group_list сформирован с правильным контекстом."""
         response = self.authorized_client.get(
@@ -92,7 +90,7 @@ class PostTests(TestCase):
         test_post = response.context['page_obj'][0]
         self.assertEqual(test_group, self.group)
         self.posts_check_all_fields(test_post)
- 
+
     def test_profile_page_show_correct_context(self):
         """Шаблон profile сформирован с правильным контекстом."""
         response = self.authorized_client.get(
@@ -104,7 +102,7 @@ class PostTests(TestCase):
         test_post = response.context['page_obj'][0]
         self.assertEqual(response.context['author'], self.author)
         self.posts_check_all_fields(test_post)
- 
+
     def test_post_detail_pages_show_correct_context(self):
         """Шаблон post_detail сформирован с правильным контекстом."""
         response = self.authorized_client.get(
@@ -113,14 +111,14 @@ class PostTests(TestCase):
                 kwargs={'post_id': self.post.id},
             )
         )
- 
+
         profile = {'post': self.post}
- 
+
         for value, expected in profile.items():
             with self.subTest(value=value):
                 context = response.context[value]
                 self.assertEqual(context, expected)
- 
+
     def test_create_post_edit_show_correct_context(self):
         """Шаблон редактирования поста create_post сформирован
         с правильным контекстом.
@@ -134,7 +132,7 @@ class PostTests(TestCase):
             with self.subTest(value=value):
                 form_field = response.context['form'].fields[value]
                 self.assertIsInstance(form_field, expected)
- 
+
     def test_create_post_show_correct_context(self):
         """Шаблон создания поста create_post сформирован
         с правильным контекстом.
@@ -149,7 +147,7 @@ class PostTests(TestCase):
             with self.subTest(field=field):
                 form_field = response.context.get('form').fields.get(field)
                 self.assertIsInstance(form_field, expected)
- 
+
     def test_create_post_show_home_group_list_profile_pages(self):
         """Созданный пост отобразился на главной, на странице группы,
         в профиле пользователя.
@@ -159,7 +157,7 @@ class PostTests(TestCase):
         self.posts_check_all_fields(post)
         group = post.group
         self.assertEqual(group, self.group)
- 
+
     def test_post_not_another_group(self):
         """Созданный пост не попал в группу, для которой не был предназначен"""
         response = self.authorized_client.get(reverse(
@@ -169,8 +167,8 @@ class PostTests(TestCase):
         self.posts_check_all_fields(post)
         group = post.group
         self.assertEqual(group, self.group)
- 
- 
+
+
 class PaginatorViewsTest(TestCase):
     @classmethod
     def setUpClass(cls):
@@ -193,7 +191,7 @@ class PaginatorViewsTest(TestCase):
             for i in range(PAGE_COUNT)
         ]
         Post.objects.bulk_create(cls.posts)
- 
+
     def test_first_page_contains_ten_records(self):
         """Количество постов на страницах index, group_list, profile
         равно 10.
@@ -210,7 +208,7 @@ class PaginatorViewsTest(TestCase):
             response = self.client.get(url)
             amount_posts = len(response.context.get('page_obj').object_list)
             self.assertEqual(amount_posts, POST_COUNT)
- 
+
     def test_second_page_contains_three_records(self):
         """На страницах index, group_list, profile
         должно быть по три поста.

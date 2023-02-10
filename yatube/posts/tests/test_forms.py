@@ -1,12 +1,12 @@
 from http import HTTPStatus
- 
+
 from django.test import Client, TestCase
 from django.urls import reverse
- 
+
 from ..forms import PostForm
 from ..models import Group, Post, User
- 
- 
+
+
 class PostCreateFormTests(TestCase):
     @classmethod
     def setUpClass(cls):
@@ -24,13 +24,13 @@ class PostCreateFormTests(TestCase):
             group=cls.group,
         )
         cls.form = PostForm()
- 
+
     def setUp(self):
         self.authorized_client = Client()
         self.authorized_client_author = Client()
         self.authorized_client.force_login(PostCreateFormTests.auth_user)
         self.authorized_client_author.force_login(PostCreateFormTests.author)
- 
+
     def test_create_task(self):
         """Валидная форма создает запись в Posts."""
         post_count = Post.objects.count()
@@ -53,7 +53,7 @@ class PostCreateFormTests(TestCase):
         post = Post.objects.latest('id')
         self.assertEqual(post.text, form_data['text'])
         self.assertEqual(post.group_id, form_data['group'])
- 
+
     def test_author_edit_post(self):
         """Валидная форма изменяет запись в Posts."""
         form_data = {
