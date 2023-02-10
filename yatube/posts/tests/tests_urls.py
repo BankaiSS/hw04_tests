@@ -25,7 +25,7 @@ class PostsURLTests(TestCase):
         cls.url_edit_post = f'/posts/{str(cls.post.id)}/edit/'
         cls.url_expected_for_redirect = f'/posts/{cls.post.id}/'
         cls.url_404 = '/unexisting_page/'
- 
+
         cls.templates_url_names_public = {
             '/': 'posts/index.html',
             f'/group/{cls.group.slug}/': 'posts/group_list.html',
@@ -47,10 +47,10 @@ class PostsURLTests(TestCase):
 
     def setUp(self):
         self.guest_client = Client()
- 
+
         self.authorized_client = Client()
         self.authorized_client.force_login(self.author)
- 
+
         self.no_author_client = Client()
         self.no_author_client.force_login(self.no_author)
 
@@ -100,7 +100,7 @@ class PostsURLTests(TestCase):
 
     def test_templates_url_names_public(self):
         """Проверка на доступнотсь ссылок гостевому пользователю."""
- 
+
         for url, template in self.templates_url_names_public.items():
             with self.subTest():
                 response = self.guest_client.get(url)
