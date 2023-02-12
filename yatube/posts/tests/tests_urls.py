@@ -1,6 +1,7 @@
 from http import HTTPStatus
 
 from django.test import Client, TestCase
+from django.urls import reverse
 
 from ..models import Group, Post, User
 

@@ -3,7 +3,6 @@ from http import HTTPStatus
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from ..forms import PostForm
 from ..models import Group, Post, User
 
 
@@ -23,7 +22,6 @@ class PostCreateFormTests(TestCase):
             text='Тестовый текст поста',
             group=cls.group,
         )
-        cls.form = PostForm()
 
     def setUp(self):
         self.authorized_client = Client()
@@ -60,19 +58,13 @@ class PostCreateFormTests(TestCase):
             'text': 'Отредактированный в форме текст',
             'group': self.group.id,
         }
-        self.authorized_client_author.post(
-            reverse('posts:post_create'),
-            data=form_data,
-            follow=True
-        )
-        post = Post.objects.get(id=self.group.id)
-        self.authorized_client_author.get(f'/posts/{post.id}/edit/')
+
         response = self.authorized_client_author.post(
             reverse('posts:post_edit', kwargs={'post_id': self.post.id}),
             data=form_data,
             follow=True
         )
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        post = Post.objects.latest('id')
+        post = Post.objects.get(id=self.post.id)
         self.assertEqual(post.text, form_data['text'])
         self.assertEqual(post.group_id, form_data['group'])

@@ -133,3 +133,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 NUMBER_OF_POSTS = 10
+
+FIRST_SYMBOLS = 15

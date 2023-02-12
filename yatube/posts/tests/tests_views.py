@@ -1,7 +1,9 @@
 from django import forms
+
 from django.test import Client, TestCase
 from django.urls import reverse
 
+from yatube.settings import NUMBER_OF_POSTS
 from ..models import Group, Post, User
 
 
@@ -196,7 +198,7 @@ class PaginatorViewsTest(TestCase):
         """Количество постов на страницах index, group_list, profile
         равно 10.
         """
-        POST_COUNT = 10
+
         urls = (
             reverse('posts:index'),
             reverse('posts:group_list', kwargs={'slug': self.group.slug}),
@@ -207,7 +209,7 @@ class PaginatorViewsTest(TestCase):
         for url in urls:
             response = self.client.get(url)
             amount_posts = len(response.context.get('page_obj').object_list)
-            self.assertEqual(amount_posts, POST_COUNT)
+            self.assertEqual(amount_posts, NUMBER_OF_POSTS)
 
     def test_second_page_contains_three_records(self):
         """На страницах index, group_list, profile
