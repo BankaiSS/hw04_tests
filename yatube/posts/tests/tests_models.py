@@ -1,6 +1,7 @@
 from django.test import TestCase
 
 from ..models import Group, Post, User
+from yatube.settings import FIRST_SYMBOLS
 
 
 class PostModelTest(TestCase):
@@ -20,7 +21,7 @@ class PostModelTest(TestCase):
 
     def test_post_str(self):
         """Проверка __str__ у post."""
-        self.assertEqual(self.post.text[:15], str(self.post))
+        self.assertEqual(self.post.text[:FIRST_SYMBOLS], str(self.post))
 
     def test_post_verbose_name(self):
         """Проверка verbose_name у post."""
