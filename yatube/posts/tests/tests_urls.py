@@ -5,6 +5,13 @@ from django.test import Client, TestCase
 from ..models import Group, Post, User
 
 
+INDEX_URL = 'posts:index'
+GROUP_URL = 'posts:group_list'
+PROFILE_URL = 'posts:profile'
+DETAIL_URL = 'posts:post_detail'
+EDIT_URL = 'posts:post_edit'
+CREATE_URL = 'posts:post_create'
+
 class PostsURLTests(TestCase):
     @classmethod
     def setUpClass(cls):
