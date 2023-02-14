@@ -46,7 +46,7 @@ class PostsURLTests(TestCase):
         }
 
     def setUp(self):
-        self.guest_client = Client()
+        self.client = Client()
 
         self.authorized_client = Client()
         self.authorized_client.force_login(self.author)
@@ -69,7 +69,7 @@ class PostsURLTests(TestCase):
         for url, template in self.templates_url_names_private.items():
 
             with self.subTest(url=url, user='anonymous'):
-                response = self.guest_client.get(url, follow=True)
+                response = self.client.get(url, follow=True)
                 self.assertRedirects(
                     response, f'/auth/login/?next={url}')
 
@@ -77,7 +77,7 @@ class PostsURLTests(TestCase):
 
         for url, template in self.templates_url_names_public.items():
             with self.subTest(url=url, user='anon'):
-                response = self.guest_client.get(url)
+                response = self.client.get(url)
                 self.assertTemplateUsed(response, template)
 
             with self.subTest(url=url, user='auth'):
@@ -87,7 +87,7 @@ class PostsURLTests(TestCase):
     def test_url_unexisting_page_404(self):
         """Проверка на несуществующую страницу."""
 
-        response = self.guest_client.get(self.url_404)
+        response = self.client.get(self.url_404)
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
     def test_templates_url_names(self):
@@ -103,5 +103,5 @@ class PostsURLTests(TestCase):
 
         for url, template in self.templates_url_names_public.items():
             with self.subTest():
-                response = self.guest_client.get(url)
+                response = self.client.get(url)
                 self.assertEqual(response.status_code, HTTPStatus.OK)
