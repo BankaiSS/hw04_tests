@@ -46,7 +46,6 @@ class PostsURLTests(TestCase):
         }
 
     def setUp(self):
-        self.client = Client()
 
         self.authorized_client = Client()
         self.authorized_client.force_login(self.author)
