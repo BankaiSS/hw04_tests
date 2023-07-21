@@ -25,13 +25,13 @@
 Клонируем проект:
 
 ```bash
-git clone https://github.com/themasterid/hw04_tests.git
+git clone https://github.com/BankaiSS/hw04_tests.git
 ```
 
 или
 
 ```bash
-git clone git@github.com:themasterid/hw04_tests.git
+git clone git@github.com:BankaiSS/hw04_tests.git
 ```
 
 Переходим в папку с проектом:
